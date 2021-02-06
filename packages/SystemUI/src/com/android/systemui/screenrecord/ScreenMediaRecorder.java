@@ -169,6 +169,7 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         wm.getDefaultDisplay().getRealMetrics(metrics);
         int refreshRate = mLowQuality ? LOW_FRAME_RATE
                 : (int) wm.getDefaultDisplay().getRefreshRate();
+        int refreshRate = (int) wm.getDefaultDisplay().getRefreshRate();
         if (mMaxRefreshRate != 0 && refreshRate > mMaxRefreshRate) refreshRate = mMaxRefreshRate;
         int[] dimens = getSupportedSize(metrics.widthPixels, metrics.heightPixels, refreshRate);
         int width = dimens[0];
