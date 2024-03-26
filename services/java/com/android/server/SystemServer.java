@@ -221,6 +221,7 @@ import dalvik.system.VMRuntime;
 
 import ink.kaleidoscope.server.GmsManagerService;
 import ink.kaleidoscope.server.ParallelSpaceManagerService;
+import org.rising.server.RisingServicesStarter;
 
 import java.io.File;
 import java.io.FileDescriptor;
