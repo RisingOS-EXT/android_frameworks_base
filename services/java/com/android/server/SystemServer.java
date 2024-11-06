@@ -208,6 +208,7 @@ import com.android.server.tv.tunerresourcemanager.TunerResourceManagerService;
 import com.android.server.twilight.TwilightService;
 import com.android.server.uri.UriGrantsManagerService;
 import com.android.server.usage.UsageStatsService;
+import com.android.server.utils.PropImitationService;
 import com.android.server.utils.TimingsTraceAndSlog;
 import com.android.server.vibrator.VibratorManagerService;
 import com.android.server.vr.VrManagerService;
@@ -2833,6 +2834,21 @@ public final class SystemServer implements Dumpable {
         t.traceBegin("StartParallelSpaceManagerService");
         mSystemServiceManager.startService(PARALLEL_SPACE_SERVICE_CLASS);
         t.traceEnd();
+        RisingServicesStarter risingServiceStarter = new RisingServicesStarter(mSystemServiceManager);
+        risingServiceStarter.startAllServices();
+
+        if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_DEVICE_LOCK)) {
+            t.traceBegin("DeviceLockService");
+            mSystemServiceManager.startServiceFromJar(DEVICE_LOCK_SERVICE_CLASS,
+                    DEVICE_LOCK_APEX_PATH);
+            t.traceEnd();
+        }
+        if (android.permission.flags.Flags.sensitiveNotificationAppProtection()
+                || android.view.flags.Flags.sensitiveContentAppProtection()) {
+            t.traceBegin("StartSensitiveContentProtectionManager");
+            mSystemServiceManager.startService(SensitiveContentProtectionManagerService.class);
+            t.traceEnd();
+        }
 
         // These are needed to propagate to the runnable below.
         final NetworkManagementService networkManagementF = networkManagement;
@@ -3110,6 +3126,11 @@ public final class SystemServer implements Dumpable {
         } catch (Throwable e) {
             reportWtf("starting System UI", e);
         }
+        t.traceEnd();
+
+        // PropImitiationService
+        t.traceBegin("PropImitationService");
+        mSystemServiceManager.startService(PropImitationService.class);
         t.traceEnd();
 
         t.traceEnd(); // startOtherServices
