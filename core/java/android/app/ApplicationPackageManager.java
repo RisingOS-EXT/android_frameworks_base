@@ -876,8 +876,19 @@ public class ApplicationPackageManager extends PackageManager {
 
     @Override
     public boolean hasSystemFeature(String name, int version) {
-        boolean hasSystemFeature = mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version));
-        return com.android.internal.util.android.FeatureHooksUtils.hasSystemFeature(name, version, hasSystemFeature);
+        String packageName = ActivityThread.currentPackageName();
+        if (packageName != null &&
+                packageName.equals("com.google.android.apps.photos") &&
+                SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
+            if (Arrays.asList(featuresPixel).contains(name)) return false;
+            if (Arrays.asList(featuresNexus).contains(name)) return true;
+        }
+        if (Arrays.asList(featuresPixelExclusives).contains(name)) {
+            return SystemProperties.get("ro.product.brand").toLowerCase().contains("google") && SystemProperties.get("ro.product.manufacturer").toLowerCase().contains("google");
+        }
+        if (Arrays.asList(featuresPixel).contains(name)) return true;
+        if (Arrays.asList(featuresAndroid).contains(name)) return true;
+        return mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version));
     }
 
     /** @hide */
