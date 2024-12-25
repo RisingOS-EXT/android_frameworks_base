@@ -52,8 +52,8 @@ public class PropImitationHooks {
     
     private static final String PRODUCT_DEVICE = "ro.product.device";
 
-    private static final String sP7PFp = "google/cheetah/cheetah:13/TQ3A.230901.001.C2/10753682:user/release-keys";
-    private static final String sFelixFp = "google/felix/felix:13/TQ3C.230901.001.B1/10750989:user/release-keys";
+    private static final String sP7PFp = "google/cheetah/cheetah:15/AP4A.241205.013/12621605:user/release-keys";
+    private static final String sFelixFp = "google/felix/felix:15/AP4A.241205.013/12621605:user/release-keys";
     private static final String sStockFp = SystemProperties.get("ro.vendor.build.fingerprint");
 
     private static final String PACKAGE_ARCORE = "com.google.ar.core";
@@ -201,7 +201,7 @@ public class PropImitationHooks {
             && (processName.equals(PROCESS_GMS_PERSISTENT) || processName.equals(PROCESS_GMS_UI));
 
         if (packageName.equals(PACKAGE_GMS)) {
-            dlog("Setting Pixel 2 fingerprint for: " + packageName);
+            dlog("Setting Pixel 9 Pro fingerprint for: " + packageName);
             setCertifiedPropsForGms(sIsGms);
         } else if (sIsAtraceCoreService){
             dlog("Spoofing as Pixel Fold for: " + packageName);
@@ -211,14 +211,14 @@ public class PropImitationHooks {
             dlog("Spoofing as Pixel Tablet for: " + packageName);
             sPTabletProps.forEach((k, v) -> setPropValue(k, v));
         } else {
-            setVersionFieldString("SECURITY_PATCH", "2023-09-01");
+            setVersionFieldString("SECURITY_PATCH", "2024-12-05");
             switch (packageName) {
                 case PACKAGE_ARCORE:
                     dlog("Setting stock fingerprint for: " + packageName);
                     setPropValue("FINGERPRINT", sStockFp);
                     break;
                 case PACKAGE_SNAPCHAT:
-                    dlog("Spoofing as Pixel 2 for: " + packageName);
+                    dlog("Spoofing as Pixel 9 Pro for: " + packageName);
                     spoofBuildGms();
                     break;
                 case PACKAGE_GCAM:
@@ -374,16 +374,16 @@ public class PropImitationHooks {
     private static void spoofBuildGms() {
         // Alter most build properties for cts profile match checks
         setPropValue("BRAND", "google");
-        setPropValue("PRODUCT", "walleye");
-        setPropValue("MODEL", "Pixel 2");
+        setPropValue("PRODUCT", "caiman");
+        setPropValue("MODEL", "Pixel 9 Pro");
     	setPropValue("MANUFACTURER", "Google");
-        setPropValue("DEVICE", "walleye");
-        setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-        setPropValue("ID", "OPM1.171019.011");
+        setPropValue("DEVICE", "caiman");
+        setPropValue("FINGERPRINT", "google/caiman/caiman:15/AP4A.241205.013/12621605:user/release-keys");
+        setPropValue("ID", "AP4A.241205.013");
         setPropValue("TYPE", "user");
         setPropValue("TAGS", "release-keys");
         setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
-        setVersionFieldString("SECURITY_PATCH", "2017-12-05");
+        setVersionFieldString("SECURITY_PATCH", "2024-12-05");
     }
 
     private static void setVersionFieldString(String key, String value) {
